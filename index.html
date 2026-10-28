@@ -62,12 +62,12 @@ function R(h){$.innerHTML=topbar()+h;window.scrollTo(0,0)}
 function cover(){R(`<div class="card c"><div class="big">🛡️💻</div><h1>Information &amp; Communication Technology (ICT)</h1><h2>Second Year Preparatory – First Term</h2><p class="sub">Unit 1: Artificial Intelligence and Protecting Our Digital Data</p>${S.name?`<p>Welcome back, <b>${esc(S.name)}</b>!</p><button onclick="home()">Continue ➜</button><button class="alt" onclick="newStudent()">New student</button>`:`<p>Enter your full name to begin:</p><input type="text" id="nm" placeholder="Your name..." maxlength="40"><div class="msg" id="mg"></div><button onclick="startApp()">Start ➜</button>`}<p><a href="#" onclick="tgate();return false" class="sub">👩‍🏫 Teacher area</a></p></div>`)}
 function newStudent(){S.name="";S.ok=0;S.res=[];S.att=[0,0,0,0];S.pts=0;save();cover()}
 function startApp(){const v=document.getElementById("nm").value.trim();if(!v){document.getElementById("mg").textContent="Please enter your name first.";return}S.name=v;save();credits()}
-function credits(){R(`<div class="card c"><div class="big">🎓</div><div class="ar"><div><b>إعداد:</b> بسمله وليد علي ابراهيم</div><div><b>المستوى الثالث</b></div><div>كلية التربية النوعية – قسم تكنولوجيا التعليم – جامعة عين شمس</div><div><b>البرنامج الدراسي:</b> اعداد اخصائي تكنولوجيا التعليم</div><div><b>تحت اشراف:</b></div><div>أ.د. خالد نوفل</div><div>د. محمد مسعد</div></div><button onclick="home()">Continue ➜</button></div>`)}
+function credits(){R(`<div class="card c"><div class="big">🎓</div><div class="ar"><div><b>إعداد:</b> بسمله وليد علي ابراهيم</div><div><b>المستوى الثالث</b></div><div>كلية التربية النوعية – قسم تكنولوجيا التعليم – جامعة عين شمس</div><div><b>البرنامج الدراسي:</b> اعداد اخصائي تكنولوجيا التعليم</div><div><b>تحت اشراف:</b></div><div>أ.د. خالد نوفل</div><div>د. محمد مسعد</div></div><button onclick="instr(true)">Continue ➜</button></div>`)}
 function home(){
  let h=`<div class="card"><h2>🏠 Welcome, ${esc(S.name)}!</h2><p class="sub">Complete the 4 levels in order. You need <b>${PASS}%</b> or more in each quiz to unlock the next level and earn a badge and a title.</p>`;
  D.forEach((l,i)=>{const r=S.res[i],lock=i>S.ok;
   h+=`<div class="lv ${lock?"lock":""}"><span class="ic">${lock?"🔒":l.e}</span><div><b>Level ${i+1}: ${l.n}</b><small>${r?`${r.ti[1]} ${r.ti[0]} – ${r.p}%`:lock?"Locked":"Ready to start"}</small></div>${lock?"":`<button onclick="openLv(${i})">${r?"Replay":"Start"}</button>`}</div>`});
- R(h+`<button onclick="dash()">📊 My Dashboard</button></div>`)}
+ R(h+`<button onclick="dash()">📊 My Dashboard</button><button class="alt" onclick="instr(false)">ℹ️ Instructions</button></div>`)}
 function openLv(i){S.lv=i;S.ci=0;lesson()}
 function lesson(){
  const L=D[S.lv],n=L.cards.length+1,last=S.ci>=L.cards.length;
@@ -139,5 +139,19 @@ function tdash(msg){
  R(`<div class="card"><h2>👩‍🏫 Class Dashboard</h2><div class="g"><div><b>${N}</b>Students</div><div><b>${all}</b>Finished all 4</div><div><b>${avg}</b>Avg. points</div>${D.map((l,i)=>`<div><b>${m.filter(o=>o.r[i][0]!=null).length}</b>Passed L${i+1}</div>`).join("")}</div>
  <p class="sub">Students tap “Send report to teacher” in their dashboard. Paste the messages or codes here:</p><textarea id="pa" placeholder="ICT1...."></textarea><div class="msg" id="mg" style="color:var(--ok)">${msg||""}</div><button onclick="tadd()">➕ Add to table</button><button class="alt" onclick="tcsv()">⬇ Export CSV</button><button class="alt" onclick="tclear()">🗑 Clear</button>
  <div class="sc"><table><tr><th>Student</th><th>L1</th><th>L2</th><th>L3</th><th>L4</th><th>Points</th></tr>${m.map(o=>`<tr><td>${esc(o.n)}</td>${o.r.map(r=>`<td>${cell(r)}</td>`).join("")}<td>${o.p}</td></tr>`).join("")||'<tr><td colspan="6">No students yet</td></tr>'}</table></div><p class="sub">Results are stored on this device only.</p><button class="alt" onclick="cover()">Exit</button></div>`)}
+
+function instr(first){
+ R(`<div class="card"><div class="c"><div class="big">📘</div><h2>Instructions</h2><p class="sub">Read this before you start</p></div><div class="ct">
+ <div class="steps">
+ <div><i>1</i><b>Learn:</b> each level starts with a short lesson in cards. Use <b>Next</b> and <b>Back</b>, then watch the video.</div>
+ <div><i>2</i><b>Quiz:</b> after the lesson, answer the questions from the book: multiple choice, true or false, and fill in the gap. Each correct answer gives you <b>${PTS} points</b>.</div>
+ <div><i>3</i><b>Pass mark:</b> you need <b>${PASS}%</b> or more to pass a level and unlock the next one. If you score less, you will see <b>Try Again</b>, and you can review the lesson or retake the quiz.</div>
+ <div><i>4</i><b>Badges:</b> 🥇 Gold 90% or more · 🥈 Silver 80% or more · 🥉 Bronze 70% or more.</div>
+ <div><i>5</i><b>Titles:</b> you earn a new title after each level.</div></div>
+ <div class="chips"><span>🏴‍☠️ Level 1: Cyber Security Pirate</span><span>🛡️ Level 2: Cyber Security Guardian</span><span>⚔️ Level 3: Deputy Cyber Security Commander</span><span>👑 Level 4: Cyber Security Commander</span></div>
+ <div class="steps"><div><i>6</i><b>Dashboard:</b> tap <b>📊 Dashboard</b> any time to see your levels, scores, points, badges and attempts.</div>
+ <div><i>7</i><b>Send your report:</b> in your dashboard, tap <b>Send report to teacher</b> to share your results.</div>
+ <div><i>8</i><b>Your progress is saved</b> on this device, so you can continue later.</div></div></div>
+ <div class="c"><button onclick="home()">${first?"Start Learning ➜":"Back to Home"}</button></div></div>`)}
 load();cover();
 </script></body></html>
